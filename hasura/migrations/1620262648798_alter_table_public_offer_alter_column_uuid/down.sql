@@ -1,1 +1,0 @@
-ALTER TABLE ONLY "public"."offer" ALTER COLUMN "uuid" DROP DEFAULT;
