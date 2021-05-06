@@ -28,5 +28,12 @@ services:
                 condition: on-failure
                 max_attempts: 5
 
+    heimdall:
+        build: heimdall
+        ports:
+            - 9000:9000
+        depends_on:
+            - hasura
+
 volumes:
     data:
