@@ -1,1 +1,30 @@
-[]
+- table:
+    schema: public
+    name: broker
+- table:
+    schema: public
+    name: broker_offer
+- table:
+    schema: public
+    name: employee
+- table:
+    schema: public
+    name: employee_info
+- table:
+    schema: public
+    name: employer
+- table:
+    schema: public
+    name: employer_broker_offer
+- table:
+    schema: public
+    name: info
+- table:
+    schema: public
+    name: offer
+- table:
+    schema: public
+    name: offer_info
+- table:
+    schema: public
+    name: registration

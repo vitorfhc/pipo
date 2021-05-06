@@ -1,0 +1,1 @@
+CREATE TABLE "public"."offer_info"("uuid" uuid NOT NULL, "offer_uuid" uuid NOT NULL, "info_uuid" uuid NOT NULL, PRIMARY KEY ("uuid") , FOREIGN KEY ("offer_uuid") REFERENCES "public"."offer"("uuid") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("info_uuid") REFERENCES "public"."info"("uuid") ON UPDATE restrict ON DELETE restrict);

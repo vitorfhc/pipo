@@ -1,0 +1,1 @@
+CREATE TABLE "public"."employee"("cpf" text NOT NULL, "employer_cnpj" text NOT NULL, PRIMARY KEY ("cpf") , FOREIGN KEY ("employer_cnpj") REFERENCES "public"."employer"("cnpj") ON UPDATE restrict ON DELETE restrict);
