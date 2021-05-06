@@ -1,30 +1,153 @@
 - table:
     schema: public
     name: broker
+  array_relationships:
+  - name: broker_offers
+    using:
+      foreign_key_constraint_on:
+        column: broker_cnpj
+        table:
+          schema: public
+          name: broker_offer
 - table:
     schema: public
     name: broker_offer
+  object_relationships:
+  - name: broker
+    using:
+      foreign_key_constraint_on: broker_cnpj
+  - name: offer
+    using:
+      foreign_key_constraint_on: offer_uuid
+  array_relationships:
+  - name: employer_broker_offers
+    using:
+      foreign_key_constraint_on:
+        column: broker_offer_uuid
+        table:
+          schema: public
+          name: employer_broker_offer
 - table:
     schema: public
     name: employee
+  object_relationships:
+  - name: employer
+    using:
+      foreign_key_constraint_on: employer_cnpj
+  array_relationships:
+  - name: employee_infos
+    using:
+      foreign_key_constraint_on:
+        column: employee_cpf
+        table:
+          schema: public
+          name: employee_info
+  - name: registrations
+    using:
+      foreign_key_constraint_on:
+        column: employee_cpf
+        table:
+          schema: public
+          name: registration
 - table:
     schema: public
     name: employee_info
+  object_relationships:
+  - name: employee
+    using:
+      foreign_key_constraint_on: employee_cpf
+  - name: info
+    using:
+      foreign_key_constraint_on: info_uuid
 - table:
     schema: public
     name: employer
+  array_relationships:
+  - name: employees
+    using:
+      foreign_key_constraint_on:
+        column: employer_cnpj
+        table:
+          schema: public
+          name: employee
+  - name: employer_broker_offers
+    using:
+      foreign_key_constraint_on:
+        column: employer_cnpj
+        table:
+          schema: public
+          name: employer_broker_offer
 - table:
     schema: public
     name: employer_broker_offer
+  object_relationships:
+  - name: broker_offer
+    using:
+      foreign_key_constraint_on: broker_offer_uuid
+  - name: employer
+    using:
+      foreign_key_constraint_on: employer_cnpj
+  array_relationships:
+  - name: registrations
+    using:
+      foreign_key_constraint_on:
+        column: ebo_uuid
+        table:
+          schema: public
+          name: registration
 - table:
     schema: public
     name: info
+  array_relationships:
+  - name: employee_infos
+    using:
+      foreign_key_constraint_on:
+        column: info_uuid
+        table:
+          schema: public
+          name: employee_info
+  - name: offer_infos
+    using:
+      foreign_key_constraint_on:
+        column: info_uuid
+        table:
+          schema: public
+          name: offer_info
 - table:
     schema: public
     name: offer
+  array_relationships:
+  - name: broker_offers
+    using:
+      foreign_key_constraint_on:
+        column: offer_uuid
+        table:
+          schema: public
+          name: broker_offer
+  - name: offer_infos
+    using:
+      foreign_key_constraint_on:
+        column: offer_uuid
+        table:
+          schema: public
+          name: offer_info
 - table:
     schema: public
     name: offer_info
+  object_relationships:
+  - name: info
+    using:
+      foreign_key_constraint_on: info_uuid
+  - name: offer
+    using:
+      foreign_key_constraint_on: offer_uuid
 - table:
     schema: public
     name: registration
+  object_relationships:
+  - name: employee
+    using:
+      foreign_key_constraint_on: employee_cpf
+  - name: employer_broker_offer
+    using:
+      foreign_key_constraint_on: ebo_uuid
