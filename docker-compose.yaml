@@ -17,6 +17,8 @@ services:
         environment:
             HASURA_GRAPHQL_DATABASE_URL: postgres://root:123456@postgres:5432/pipo
             HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+            HASURA_GRAPHQL_ADMIN_SECRET: "RandomAdminSuperSecret"
+            HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","key":"-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAygJSSRlXRgvlRRIt4/qi\nvEdFSzt47sO8QYiGbPn5jodZmEgUR5VKBm0R0psiOBcXqR46u8nkN0l5qXpDlPQ7\ns5GrGzP6kj6vK/YP6h9XkvSf77UI4C18YvHtVi5ml3FZatk4JZL5DJ7cWvVIKyVX\ngcja4cIdRiMAIZxv2t2d5vXf8JBXVWYfm5V4j2IHClcqVwsE/ys18ykK9mMn5OEZ\namw+T89eGZPGtvm79CFFEB42a6KVNyDW6bmZdHU2CPu99joitT4l8mMsR42D/5Tb\nDqaKSAZ4a0ScLoBuFJUq42Nm0duX+LfhEZNoBekj4UZT41AUYFJEt/4Dl58c9hfq\nockVVojBQM13CmvsF/h0PutlXPWxy6knS8qT0PwtUngSh9cNjT5w90Xs4UAgtEGx\nGWxumv4t2ThEy7kEJgsbGTgjK5pcdDTWZyyYvte8aV6aW9t3UguDMQgvaNnZNxTg\nY9aMqYsw1EPEbOZg/DuYB6AUVqu7mO5dgJBdHQ5IIEHrLN2dHncX25cFHOMrdQQ5\nJ8L6c6u1wNgTI6XYUWY1/Pg2YSvM/8fBIS/xyD+TKQxJNpY2OROFb8RrNG4VJAFZ\n+XPkJVpvLLaFXPxCf4IbtVSQ8T8AbKkWVKjMAS0PtyacOfuzG0xs1BqnRTM94j3c\n1Y8ryJZHKR9lxXm3+ocKm1ECAwEAAQ==\n-----END PUBLIC KEY-----","claims_namespace":"hasura","header":{"type":"Cookie","name":"pipo-token"}}'
         volumes:
             - ./hasura/metadata:/hasura-metadata:ro
             - ./hasura/migrations:/hasura-migrations:ro
@@ -32,6 +34,9 @@ services:
         build: heimdall
         ports:
             - 9000:9000
+        environment:
+            HEIMDALL_HASURA_ADMIN_SECRET: "RandomAdminSuperSecret"
+            HEIMDALL_GRAPHQL: "http://hasura:8080/v1/graphql"
         depends_on:
             - hasura
 

@@ -49,7 +49,7 @@ func AuthHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:     "jwt",
+		Name:     "pipo-token",
 		Value:    "token",
 		HttpOnly: true,
 		// Uncomment below on production
@@ -58,5 +58,4 @@ func AuthHandler(w http.ResponseWriter, req *http.Request) {
 	})
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"token": "token"}`))
 }

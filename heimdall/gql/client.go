@@ -20,3 +20,15 @@ func init() {
 		logrus.WithField("package", "graphql").Debug(s)
 	}
 }
+
+func newAuthenticatedRequest(query string) *graphql.Request {
+	adminSecret, ok := os.LookupEnv("HEIMDALL_HASURA_ADMIN_SECRET")
+
+	if !ok {
+		return graphql.NewRequest(query)
+	}
+
+	req := graphql.NewRequest(query)
+	req.Header.Set("x-hasura-admin-secret", adminSecret)
+	return req
+}

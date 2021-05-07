@@ -3,7 +3,6 @@ package gql
 import (
 	"context"
 
-	"github.com/machinebox/graphql"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,7 +17,7 @@ type employerResponse struct {
 }
 
 func GetEmployer(cnpj string) EmployerObject {
-	req := graphql.NewRequest(getEmployerQuery)
+	req := newAuthenticatedRequest(getEmployerQuery)
 	req.Var("cnpj", cnpj)
 	var res employerResponse
 
