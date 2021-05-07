@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/sirupsen/logrus"
+	"github.com/vitorfhc/heimdall/auth"
 	"github.com/vitorfhc/heimdall/gql"
 )
 
@@ -36,6 +37,7 @@ func AuthHandler(w http.ResponseWriter, req *http.Request) {
 	err := jsonDecoder.Decode(&loginData)
 	if err != nil {
 		logrus.WithField("handler", "AuthHandler").Error("Error trying to decode JSON from request body: ", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -48,9 +50,16 @@ func AuthHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	tokenString, err := auth.GenerateToken(employer)
+	if err != nil {
+		logrus.WithField("handler", "AuthHandler").Error("Error trying to sign token: ", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	http.SetCookie(w, &http.Cookie{
 		Name:     "pipo-token",
-		Value:    "token",
+		Value:    tokenString,
 		HttpOnly: true,
 		// Uncomment below on production
 		// Secure: true,

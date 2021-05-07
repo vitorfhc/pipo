@@ -37,6 +37,7 @@ services:
         environment:
             HEIMDALL_HASURA_ADMIN_SECRET: "RandomAdminSuperSecret"
             HEIMDALL_GRAPHQL: "http://hasura:8080/v1/graphql"
+            HEIMDALL_PRIVATE_KEY: "/app/jwt/jwtRS256.key"
         depends_on:
             - hasura
 
