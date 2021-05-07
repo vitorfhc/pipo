@@ -37,7 +37,11 @@ func init() {
 
 func GenerateToken(employer gql.EmployerObject) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
-		"cnpj": employer.CNPJ,
+		"hasura": jwt.MapClaims{
+			"x-hasura-user-id":       employer.UUID,
+			"x-hasura-default-role":  "employer",
+			"x-hasura-allowed-roles": []string{"employer"},
+		},
 	})
 
 	signed, err := token.SignedString(pKey)
