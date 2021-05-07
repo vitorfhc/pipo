@@ -9,6 +9,13 @@
         table:
           schema: public
           name: broker_offer
+  select_permissions:
+  - role: employer
+    permission:
+      columns:
+      - cnpj
+      - name
+      filter: {}
 - table:
     schema: public
     name: broker_offer
@@ -27,6 +34,14 @@
         table:
           schema: public
           name: employer_broker_offer
+  select_permissions:
+  - role: employer
+    permission:
+      columns:
+      - broker_cnpj
+      - offer_uuid
+      - uuid
+      filter: {}
 - table:
     schema: public
     name: employee
@@ -49,6 +64,45 @@
         table:
           schema: public
           name: registration
+  insert_permissions:
+  - role: employer
+    permission:
+      check:
+        employer:
+          uuid:
+            _eq: X-Hasura-User-Id
+      columns:
+      - cpf
+      backend_only: false
+  select_permissions:
+  - role: employer
+    permission:
+      columns:
+      - cpf
+      filter:
+        employer:
+          uuid:
+            _eq: X-Hasura-User-Id
+  update_permissions:
+  - role: employer
+    permission:
+      columns:
+      - cpf
+      filter:
+        employer:
+          uuid:
+            _eq: X-Hasura-User-Id
+      check:
+        employer:
+          uuid:
+            _eq: X-Hasura-User-Id
+  delete_permissions:
+  - role: employer
+    permission:
+      filter:
+        employer:
+          uuid:
+            _eq: X-Hasura-User-Id
 - table:
     schema: public
     name: employee_info
@@ -59,6 +113,51 @@
   - name: info
     using:
       foreign_key_constraint_on: info_uuid
+  insert_permissions:
+  - role: employer
+    permission:
+      check:
+        employee:
+          employer:
+            uuid:
+              _eq: X-Hasura-User-Id
+      columns:
+      - uuid
+      - employee_cpf
+      - info_uuid
+      - data
+      backend_only: false
+  select_permissions:
+  - role: employer
+    permission:
+      columns:
+      - uuid
+      - employee_cpf
+      - info_uuid
+      - data
+      filter:
+        employee:
+          employer:
+            uuid:
+              _eq: X-Hasura-User-Id
+  update_permissions:
+  - role: employer
+    permission:
+      columns:
+      - uuid
+      - employee_cpf
+      - info_uuid
+      - data
+      filter:
+        employee:
+          employer:
+            uuid:
+              _eq: X-Hasura-User-Id
+      check:
+        employee:
+          employer:
+            uuid:
+              _eq: X-Hasura-User-Id
 - table:
     schema: public
     name: employer
@@ -77,6 +176,16 @@
         table:
           schema: public
           name: employer_broker_offer
+  select_permissions:
+  - role: employer
+    permission:
+      columns:
+      - cnpj
+      - name
+      - uuid
+      filter:
+        uuid:
+          _eq: X-Hasura-User-Id
 - table:
     schema: public
     name: employer_broker_offer
@@ -95,6 +204,21 @@
         table:
           schema: public
           name: registration
+  select_permissions:
+  - role: employer
+    permission:
+      columns:
+      - broker_offer_uuid
+      - created_at
+      - employer_cnpj
+      - uuid
+      filter:
+        _and:
+        - employer:
+            uuid:
+              _eq: X-Hasura-User-Id
+        - activated:
+            _eq: true
 - table:
     schema: public
     name: info
@@ -113,6 +237,14 @@
         table:
           schema: public
           name: offer_info
+  select_permissions:
+  - role: employer
+    permission:
+      columns:
+      - name
+      - regex
+      - uuid
+      filter: {}
 - table:
     schema: public
     name: offer
@@ -131,6 +263,13 @@
         table:
           schema: public
           name: offer_info
+  select_permissions:
+  - role: employer
+    permission:
+      columns:
+      - name
+      - uuid
+      filter: {}
 - table:
     schema: public
     name: offer_info
@@ -141,6 +280,14 @@
   - name: offer
     using:
       foreign_key_constraint_on: offer_uuid
+  select_permissions:
+  - role: employer
+    permission:
+      columns:
+      - info_uuid
+      - offer_uuid
+      - uuid
+      filter: {}
 - table:
     schema: public
     name: registration
@@ -151,3 +298,30 @@
   - name: employer_broker_offer
     using:
       foreign_key_constraint_on: ebo_uuid
+  insert_permissions:
+  - role: employer
+    permission:
+      check:
+        employee:
+          employer:
+            uuid:
+              _eq: X-Hasura-User-Id
+      columns:
+      - activated
+      - ebo_uuid
+      - employee_cpf
+      - uuid
+      backend_only: false
+  select_permissions:
+  - role: employer
+    permission:
+      columns:
+      - activated
+      - ebo_uuid
+      - employee_cpf
+      - uuid
+      filter:
+        employee:
+          employer:
+            uuid:
+              _eq: X-Hasura-User-Id
