@@ -22,7 +22,7 @@ services:
         volumes:
             - ./hasura/metadata:/hasura-metadata:ro
             - ./hasura/migrations:/hasura-migrations:ro
-            - ./hasura/seeds:/hasura-seeds
+            - ./hasura:/hasura
         depends_on:
             - postgres
         deploy:
