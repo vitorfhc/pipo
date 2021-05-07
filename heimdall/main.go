@@ -1,15 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
+	"github.com/sirupsen/logrus"
 	"github.com/vitorfhc/heimdall/handlers"
+	_ "github.com/vitorfhc/heimdall/logger"
 )
 
 func main() {
 	http.HandleFunc("/auth", handlers.AuthHandler)
 
-	fmt.Println("Starting server...")
-	http.ListenAndServe(":9000", nil)
+	addr := "0.0.0.0:9000"
+	logrus.Info("Starting server at ", addr)
+	http.ListenAndServe(addr, nil)
 }
