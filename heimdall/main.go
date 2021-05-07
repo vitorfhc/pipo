@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/sirupsen/logrus"
 	"github.com/vitorfhc/heimdall/handlers"
@@ -11,7 +12,11 @@ import (
 func main() {
 	http.HandleFunc("/auth", handlers.AuthHandler)
 
-	addr := "0.0.0.0:9000"
+	addr, exists := os.LookupEnv("HEIMDALL_ADDR")
+	if !exists {
+		addr = "0.0.0.0:9000"
+	}
+
 	logrus.Info("Starting server at ", addr)
 	err := http.ListenAndServe(addr, nil)
 	if err != nil {

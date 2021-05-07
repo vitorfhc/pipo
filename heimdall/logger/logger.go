@@ -1,7 +1,16 @@
 package logger
 
-import "github.com/sirupsen/logrus"
+import (
+	"os"
+
+	"github.com/sirupsen/logrus"
+)
 
 func init() {
-	logrus.SetLevel(logrus.InfoLevel)
+	level := logrus.InfoLevel
+	_, exists := os.LookupEnv("HEIMDALL_DEBUG")
+	if exists {
+		level = logrus.DebugLevel
+	}
+	logrus.SetLevel(level)
 }
