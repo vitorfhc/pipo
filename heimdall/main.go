@@ -13,5 +13,8 @@ func main() {
 
 	addr := "0.0.0.0:9000"
 	logrus.Info("Starting server at ", addr)
-	http.ListenAndServe(addr, nil)
+	err := http.ListenAndServe(addr, nil)
+	if err != nil {
+		logrus.Error("Error starting server: ", err)
+	}
 }

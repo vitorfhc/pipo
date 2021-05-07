@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"net/http"
 
 	"github.com/sirupsen/logrus"
+	"github.com/vitorfhc/heimdall/gql"
 )
 
 type loginJSON struct {
@@ -33,7 +36,27 @@ func AuthHandler(w http.ResponseWriter, req *http.Request) {
 	err := jsonDecoder.Decode(&loginData)
 	if err != nil {
 		logrus.WithField("handler", "AuthHandler").Error("Error trying to decode JSON from request body: ", err)
+		return
 	}
 
-	logrus.Debug(loginData)
+	employer := gql.GetEmployer(loginData.Username)
+	hashBytes := md5.Sum([]byte(loginData.Password))
+	hash := hex.EncodeToString(hashBytes[:])
+
+	if employer.Password != hash {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "jwt",
+		Value:    "token",
+		HttpOnly: true,
+		// Uncomment below on production
+		// Secure: true,
+		// Domain: "domain.com",
+	})
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"token": "token"}`))
 }
